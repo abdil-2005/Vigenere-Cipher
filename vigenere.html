@@ -1,0 +1,168 @@
+<html>
+<head>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .deskripsi {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            font-family: monospace; 
+        }
+
+        .tombol-area {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            border-radius: 3px;
+            margin: 0 5px;
+        }
+
+        .btn-encrypt {
+            background-color: #4CAF50; 
+            color: white;
+        }
+
+        .btn-decrypt {
+            background-color: #f44336; 
+            color: white;
+        }
+
+        .btn-encrypt:hover { background-color: #45a049; }
+        .btn-decrypt:hover { background-color: #d32f2f; }
+
+        #hasil {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8e8e8;
+            border: 1px solid #ccc;
+            min-height: 50px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Vigenère Cipher Tool</h1>
+        <p class="deskripsi">Enkripsi Dekripsi Tools</p>
+
+
+        <label for="key">Kunci (Key):</label>
+        <input type="text" id="key" placeholder="Contoh: RAHASIA">
+ 
+ 
+        <label for="inputText">Teks Input:</label>
+        <textarea id="inputText" rows="5" placeholder="Masukkan teks di sini..." style="resize: none;"></textarea>  
+
+
+        <div class="tombol-area">
+            <button class="btn-encrypt" onclick="proses('encrypt')">Enkripsi</button>
+            <button class="btn-decrypt" onclick="proses('decrypt')">Dekripsi</button>
+        </div>
+
+
+        <label>Hasil:</label>
+        <div id="hasil">Hasil akan muncul di sini...</div>
+    </div>
+
+    <script>
+
+        function proses(mode) {
+            var teks = document.getElementById("inputText").value;
+            var kunci = document.getElementById("key").value;
+            var hasilDiv = document.getElementById("hasil");
+
+
+            if (kunci == "" || teks == "") {
+                alert("Kunci sama teksnya diisi dulu kocak");
+                return;
+            }
+
+ 
+            teks = teks.toUpperCase();
+            kunci = kunci.toUpperCase();
+            
+            var hasil = "";
+            var indeksKunci = 0;
+
+
+            for (var i = 0; i < teks.length; i++) {
+                var kodeTeks = teks.charCodeAt(i);
+                
+
+                if (kodeTeks >= 65 && kodeTeks <= 90) {
+                    var kodeKunci = kunci.charCodeAt(indeksKunci % kunci.length) - 65;
+                    var kodeHasil;
+
+                    if (mode == 'encrypt') {
+
+                        kodeHasil = ((kodeTeks - 65 + kodeKunci) % 26) + 65;
+                    } else {
+
+                        kodeHasil = ((kodeTeks - 65 - kodeKunci + 26) % 26) + 65;
+                    }
+
+                    hasil += String.fromCharCode(kodeHasil);
+                    indeksKunci++; 
+                } else {
+
+                    hasil += teks[i];
+                }
+            }
+
+            if (mode == 'encrypt') {
+                hasilDiv.innerHTML = "Hasil Enkripsi: <br>" + hasil;
+                hasilDiv.style.color = "green";
+            } else {
+                hasilDiv.innerHTML = "Hasil Dekripsi: <br>" + hasil;
+                hasilDiv.style.color = "green";
+            }
+        }
+    </script>
+
+</body>
+</html>
